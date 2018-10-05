@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "Scratch Blocks is a library for building creative computing interfaces.",
   "author": "Massachusetts Institute of Technology",
-  "contributors": [ "Logiscool" ],
+  "contributors": [
+    "Logiscool"
+  ],
   "license": "Apache-2.0",
   "homepage": "https://github.com/Logiscool/scratch-blocks#readme",
   "repository": {
@@ -15,6 +17,7 @@
   "scripts": {
     "deploy": "rimraf gh-pages/closure-library/scripts/ci/CloseAdobeDialog.exe && gh-pages -t -d gh-pages -m \"Build for $(git log --pretty=format:%H -n1)\"",
     "prepublish": "python build.py && webpack",
+    "build": "python build.py && webpack",
     "test:setup": "tests/scripts/test_setup.sh",
     "test:unit": "node tests/jsunit/test_runner.js",
     "test:lint": "eslint .",
@@ -22,7 +25,7 @@
     "test": "npm run test:lint && npm run test:messages && npm run test:setup && npm run test:unit",
     "version": "json -f package.json -I -e \"this.repository.sha = '$(git log -n1 --pretty=format:%H)'\"",
     "translate": "npm run test:messages && node i18n/json_to_js.js",
-    "translate:update":  "node i18n/create_scratch_msgs.js"
+    "translate:update": "node i18n/create_scratch_msgs.js"
   },
   "dependencies": {
     "exports-loader": "0.6.3",
