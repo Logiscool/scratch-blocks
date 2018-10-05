@@ -152,3 +152,27 @@ Blockly.Blocks['math_angle'] = {
     });
   }
 };
+
+Blockly.Blocks['math_angle_minutes'] = {
+  /**
+   * Block for angle picker with minutes as unit.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.jsonInit({
+      "message0": "%1",
+      "args0": [
+        {
+          "type": "field_angle_minutes",
+          "name": "NUM",
+          "value": 90
+        }
+      ],
+      "output": "Number",
+      "outputShape": Blockly.OUTPUT_SHAPE_ROUND,
+      "colour": Blockly.Colours.textField,
+      "colourSecondary": Blockly.Colours.textField,
+      "colourTertiary": Blockly.Colours.textField
+    });
+  }
+};
