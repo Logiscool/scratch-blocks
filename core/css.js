@@ -246,6 +246,7 @@ Blockly.Css.CONTENT = [
     'box-shadow: 0px 0px 8px 1px ' + Blockly.Colours.dropDownShadow + ';',
     'padding: 4px;',
     '-webkit-user-select: none;',
+    'min-height: 26px',
   '}',
 
   '.blocklyDropDownContent {',
@@ -433,6 +434,12 @@ Blockly.Css.CONTENT = [
     'cursor: url("<<<PATH>>>/handdelete.cur"), auto;',
   '}',
 
+  '.blocklyToolboxGrab {',
+    'cursor: url("<<<PATH>>>/handclosed.cur"), auto;',
+    'cursor: grabbing;',
+    'cursor: -webkit-grabbing;',
+  '}',
+
   '.blocklyDragging>.blocklyPath,',
   '.blocklyDragging>.blocklyPathLight {',
     'fill-opacity: 1.0;',
@@ -481,18 +488,13 @@ Blockly.Css.CONTENT = [
   '.blocklyBubbleText {',
     'fill: $colour_text;',
   '}',
-
-  '.blocklyFlyout {',
-    'position: absolute;',
-    'z-index: 20;',
-  '}',
-
   '.blocklyFlyout {',
     'position: absolute;',
     'z-index: 20;',
   '}',
   '.blocklyFlyoutButton {',
     'fill: none;',
+    'pointer-events: all;',
   '}',
 
   '.blocklyFlyoutButtonBackground {',
@@ -504,7 +506,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyFlyoutButtonShadow {',
-    'fill: none;',
+    'fill: transparent;',
   '}',
 
   '.blocklyFlyoutButton:hover {',
@@ -570,12 +572,131 @@ Blockly.Css.CONTENT = [
     'padding: 0;',
   '}',
 
+  '.blocklyCommentForeignObject {',
+    'position: relative;',
+    'z-index: 0;',
+  '}',
+
+  '.blocklyCommentRect {',
+    'fill: #E7DE8E;',
+    'stroke: #bcA903;',
+    'stroke-width: 1px',
+  '}',
+
+  '.blocklyCommentTarget {',
+    'fill: transparent;',
+    'stroke: #bcA903;',
+  '}',
+
+  '.blocklyCommentTargetFocused {',
+    'fill: none;',
+  '}',
+
+  '.blocklyCommentHandleTarget {',
+    'fill: none;',
+  '}',
+
+  '.blocklyCommentHandleTargetFocused {',
+    'fill: transparent;',
+  '}',
+
+  '.blocklyFocused>.blocklyCommentRect {',
+    'fill: #B9B272;',
+    'stroke: #B9B272;',
+  '}',
+
+  '.blocklySelected>.blocklyCommentTarget {',
+    'stroke: #fc3;',
+    'stroke-width: 3px;',
+  '}',
+
+
   '.blocklyCommentTextarea {',
-    'background-color: #ffc;',
+    'background-color: #fef49c;',
     'border: 0;',
+    'outline: 0;',
     'margin: 0;',
-    'padding: 2px;',
+    'padding: 3px;',
     'resize: none;',
+    'display: block;',
+    'overflow: hidden;',
+  '}',
+
+  '.blocklyCommentDeleteIcon {',
+    'cursor: pointer;',
+    'fill: #000;',
+    'display: none',
+  '}',
+
+  '.blocklySelected > .blocklyCommentDeleteIcon {',
+    'display: block',
+  '}',
+
+  '.blocklyDeleteIconShape {',
+    'fill: #000;',
+    'stroke: #000;',
+    'stroke-width: 1px;',
+  '}',
+
+  '.blocklyDeleteIconShape.blocklyDeleteIconHighlighted {',
+    'stroke: #fc3;',
+  '}',
+
+  // Scratch Comments
+
+  '.scratchCommentForeignObject {',
+    'position: relative;',
+  '}',
+
+  '.scratchCommentBody {',
+    'background-color: #fef49c;',
+  '}',
+
+  '.scratchCommentRect {',
+    'fill: #fef49c;',
+  '}',
+
+  '.scratchCommentTarget {',
+    'fill: transparent;',
+  '}',
+
+  '.scratchWorkspaceCommentBorder {',
+    'stroke: #bcA903;',
+    'stroke-width: 1px;',
+  '}',
+
+  '.scratchCommentTargetFocused {',
+    'fill: none;',
+  '}',
+
+  '.scratchCommentTopBar {',
+    'fill: #000000;',
+    'fill-opacity: 0.1',
+  '}',
+
+  '.scratchCommentText {',
+    'font-family: "Helvetica Neue", Helvetica, sans-serif;',
+    'font-size: 12pt;',
+    'font-weight: 400;',
+  '}',
+
+  '.scratchCommentTextarea {',
+    'background-color: #fef49c;',
+    'border: 0;',
+    'outline: 0;',
+    'padding: 0;',
+    'resize: none;',
+    'overflow: hidden;',
+  '}',
+
+  '.scratchCommentResizeSE {',
+    'cursor: se-resize;',
+    'fill: transparent;',
+  '}',
+
+  '.scratchCommentResizeSW {',
+    'cursor: sw-resize;',
+    'fill: transparent;',
   '}',
 
   '.blocklyHtmlInput {',
@@ -834,7 +955,7 @@ Blockly.Css.CONTENT = [
   '.blocklyDropDownDiv .goog-slider-horizontal .goog-slider-thumb {',
     'width: 26px;',
     'height: 26px;',
-    'margin-top: -1px;',
+    'top: -1px;',
     'position: absolute;',
     'background-color: white;',
     'border-radius: 100%;',
@@ -867,6 +988,12 @@ Blockly.Css.CONTENT = [
 
   '.scratchColourPickerReadout {',
     'margin-left: 10px;',
+  '}',
+
+  '.scratchMatrixButtonDiv {',
+    'width: 50%;',
+    'text-align: center;',
+    'float: left;',
   '}',
 
   /* Copied from: goog/css/menu.css */
@@ -1055,7 +1182,7 @@ Blockly.Css.CONTENT = [
   '.blocklyDropDownDiv .goog-menuitem-rtl .goog-menuitem-icon {',
      /* Flip left/right positioning. */
      'float: right;',
-     'margin-left: 6px;',
+     'margin-right: -24px;',
   '}',
 
   /* Keyboard shortcut ("accelerator") style. */
@@ -1134,7 +1261,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.scratchCategoryMenu {',
-    'width: 52px;',
+    'width: 60px;',
     'background: $colour_toolbox;',
     'color: $colour_toolboxText;',
     'font-size: .7rem;',
