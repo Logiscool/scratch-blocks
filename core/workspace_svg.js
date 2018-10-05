@@ -1181,8 +1181,10 @@ Blockly.WorkspaceSvg.prototype.createVariable = function(name, opt_type, opt_id,
  * Update cached areas for this workspace.
  */
 Blockly.WorkspaceSvg.prototype.recordCachedAreas = function() {
-  this.recordBlocksArea_();
-  this.recordDeleteAreas_();
+  setTimeout(() => {
+    this.recordBlocksArea_();
+    this.recordDeleteAreas_();
+  }, 100)
 };
 
 /**
