@@ -391,10 +391,15 @@ Blockly.Gesture.prototype.updateIsDraggingBlock_ = function() {
   }
 
   if (this.isDraggingBlock_) {
+    this.updateIsDraggingBlockCallback_();
     this.startDraggingBlock_();
     return true;
   }
   return false;
+};
+
+Blockly.Gesture.prototype.updateIsDraggingBlockCallback_ = function() {
+
 };
 
 /**
@@ -802,6 +807,10 @@ Blockly.Gesture.prototype.setStartField = function(field) {
   goog.asserts.assert(!this.hasStarted_,
       'Tried to call gesture.setStartField, but the gesture had already been ' +
       'started.');
+  if (this.hasStarted_ || field.sourceBlock_.isInFlyout) {
+    return;
+  }
+
   if (!this.startField_) {
     this.startField_ = field;
   }
