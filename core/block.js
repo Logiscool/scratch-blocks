@@ -296,6 +296,9 @@ Blockly.Block.prototype.dispose = function(healStack) {
       }
       connections[i].dispose();
     }
+  } catch (e) {
+    //HACK
+    console.warn(e)
   } finally {
     Blockly.Events.enable();
   }

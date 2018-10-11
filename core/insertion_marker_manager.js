@@ -493,7 +493,11 @@ Blockly.InsertionMarkerManager.prototype.showPreview_ = function() {
   if (this.shouldReplace_()) {
     this.highlightBlock_();
   } else {  // Should insert
-    this.connectMarker_();
+    try {
+      this.connectMarker_();
+    } catch (e) {
+      console.warn(e)
+    }
   }
 };
 
