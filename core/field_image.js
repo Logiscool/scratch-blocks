@@ -42,7 +42,7 @@ goog.require('goog.userAgent');
  * @extends {Blockly.Field}
  * @constructor
  */
-Blockly.FieldImage = function(src, width, height, opt_alt, flip_rtl) {
+Blockly.FieldImage = function(src, width, height, opt_alt, flip_rtl, opt_onClick) {
   this.sourceBlock_ = null;
 
   // Ensure height and width are numbers.  Strings are bad at math.
@@ -52,6 +52,10 @@ Blockly.FieldImage = function(src, width, height, opt_alt, flip_rtl) {
   this.text_ = opt_alt || '';
   this.flipRTL_ = flip_rtl;
   this.setValue(src);
+
+  if (typeof opt_onClick == 'function') {
+    this.clickHandler_ = opt_onClick;
+  }
 };
 goog.inherits(Blockly.FieldImage, Blockly.Field);
 
@@ -107,6 +111,8 @@ Blockly.FieldImage.prototype.init = function() {
   // Configure the field to be transparent with respect to tooltips.
   this.setTooltip(this.sourceBlock_);
   Blockly.Tooltip.bindMouseEvents(this.imageElement_);
+
+  this.maybeAddClickHandler_();
 };
 
 /**
@@ -116,6 +122,19 @@ Blockly.FieldImage.prototype.dispose = function() {
   goog.dom.removeNode(this.fieldGroup_);
   this.fieldGroup_ = null;
   this.imageElement_ = null;
+};
+
+/**
+ * Bind events for a mouse down on the image, but only if a click handler has
+ * been defined.
+ * @private
+ */
+Blockly.FieldImage.prototype.maybeAddClickHandler_ = function() {
+  if (this.clickHandler_) {
+    this.mouseDownWrapper_ =
+      Blockly.bindEventWithChecks_(
+        this.fieldGroup_, 'mousedown', this, this.clickHandler_);
+  }
 };
 
 /**
@@ -188,6 +207,12 @@ Blockly.FieldImage.prototype.render_ = function() {
  */
 Blockly.FieldImage.prototype.updateWidth = function() {
   // NOP
+};
+
+Blockly.FieldImage.prototype.showEditor_ = function() {
+  if (this.clickHandler_) {
+    this.clickHandler_(this);
+  }
 };
 
 Blockly.Field.register('field_image', Blockly.FieldImage);
