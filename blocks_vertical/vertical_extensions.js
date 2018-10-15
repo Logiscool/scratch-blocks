@@ -263,3 +263,39 @@ Blockly.ScratchBlocks.VerticalExtensions.registerAll = function() {
 };
 
 Blockly.ScratchBlocks.VerticalExtensions.registerAll();
+
+Blockly.Extensions.registerMutator('mutator_multi_prop', {
+  mutationToDom: function() {
+    const container = document.createElement('mutation');
+    container.setAttribute('value_count', this.valueCount);
+    return container
+  },
+  domToMutation: function(xmlElement) {
+    this.valueCount = +xmlElement.getAttribute('value_count');
+    this.updateShape_();
+  },
+  addInput_: function(count) {
+    this.appendValueInput(`VAL_${count}`);
+    this.moveInputBefore(`VAL_${count}`, 'BUTTONS');
+    this.valueCount = count;
+  },
+  removeInput_: function(count) {
+    this.removeInput(`VAL_${this.valueCount}`);
+    this.valueCount = count;
+  },
+  updateShape_: function() {
+    for(let i = 0; i < this.valueCount; i++) {
+      this.appendValueInput('VAL_' + i);
+      this.moveInputBefore('VAL_' + i, 'BUTTONS');
+    }
+  }
+}, function () {
+  this.workspace.addChangeListener((event) => {
+    if (event.type !== 'FUNCTION_PARAMS_COUNT_CHANGE') {
+      return;
+    }
+    event.count < this.valueCount
+      ? this.removeInput_(event.count)
+      : this.addInput_(event.count);
+  })
+});
