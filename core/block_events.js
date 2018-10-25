@@ -54,6 +54,7 @@ Blockly.Events.BlockBase = function(block) {
    * The block id for the block this event pertains to
    * @type {string}
    */
+  this.block = block;
   this.blockId = block.id;
   this.workspaceId = block.workspace.id;
 };
