@@ -292,7 +292,7 @@ Blockly.Extensions.registerMutator('mutator_multi_prop', {
   }
 }, function () {
   this.workspace.addChangeListener((event) => {
-    if (event.type !== 'MULTI_PARAMS_COUNT_CHANGE') {
+    if (event.type !== Blockly.Events.MULTI_PARAMS_COUNT_CHANGE) {
       return;
     }
     event.count < this.valueCount

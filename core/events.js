@@ -164,6 +164,12 @@ Blockly.Events.COMMENT_DELETE = 'comment_delete';
 Blockly.Events.UI = 'ui';
 
 /**
+ * Name of event that records a change of a multi parameter.
+ * @const
+ */
+Blockly.Events.MULTI_PARAMS_COUNT_CHANGE = 'MULTI_PARAMS_COUNT_CHANGE';
+
+/**
  * List of events queued for firing.
  * @private
  */

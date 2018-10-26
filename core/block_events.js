@@ -29,6 +29,7 @@ goog.provide('Blockly.Events.BlockChange');
 goog.provide('Blockly.Events.BlockCreate');
 goog.provide('Blockly.Events.BlockDelete');
 goog.provide('Blockly.Events.BlockMove');
+goog.provide('Blockly.Events.BlockMultiParameter');
 goog.provide('Blockly.Events.Change');  // Deprecated.
 goog.provide('Blockly.Events.Create');  // Deprecated.
 goog.provide('Blockly.Events.Delete');  // Deprecated.
@@ -525,3 +526,71 @@ Blockly.Events.Move.prototype.run = function(forward) {
     }
   }
 };
+
+
+
+
+
+
+
+/**
+ * Class for a block multi parameter change event.
+ * @param {Blockly.Block} block The changed block.
+ * @param {'add'|'remove'} kind Add/remove of a parameter
+ * @param {number} count The new count of inner parameters
+ * @extends {Blockly.Events.BlockBase}
+ * @constructor
+ */
+Blockly.Events.MultiParameter = function(block, kind, count) {
+  if (!block) {
+    return;  // Blank event to be populated by fromJson.
+  }
+  Blockly.Events.MultiParameter.superClass_.constructor.call(this, block);
+  this.kind = kind;
+  this.count = count
+};
+goog.inherits(Blockly.Events.MultiParameter, Blockly.Events.BlockBase);
+
+/**
+ * Class for a block move event.  Created before the move.
+ * @param {Blockly.Block} block The moved block.  Null for a blank event.
+ * @extends {Blockly.Events.BlockBase}
+ * @constructor
+ */
+Blockly.Events.BlockMultiParameter = Blockly.Events.MultiParameter;
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.MultiParameter.prototype.type = Blockly.Events.MULTI_PARAMS_COUNT_CHANGE;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.MultiParameter.prototype.toJson = function() {
+  var json = Blockly.Events.MultiParameter.superClass_.toJson.call(this);
+  json['count'] = this.count;
+  json['kind'] = this.kind;
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.MultiParameter.prototype.fromJson = function(json) {
+  Blockly.Events.MultiParameter.superClass_.fromJson.call(this, json);
+  this.count = json['count'];
+  this.kind = json['kind'];
+};
+
+/**
+ * Run a move event.
+ * @param {boolean} forward True if run forward, false if run backward (undo).
+ */
+Blockly.Events.MultiParameter.prototype.run = function(forward) {
+  //TODO
+};
+

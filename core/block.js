@@ -35,6 +35,7 @@ goog.require('Blockly.Events.BlockChange');
 goog.require('Blockly.Events.BlockCreate');
 goog.require('Blockly.Events.BlockDelete');
 goog.require('Blockly.Events.BlockMove');
+goog.require('Blockly.Events.BlockMultiParameter');
 goog.require('Blockly.Extensions');
 goog.require('Blockly.FieldLabelSerializable');
 goog.require('Blockly.FieldVariableGetter');
