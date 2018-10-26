@@ -305,6 +305,16 @@ Blockly.utils.createSvgElement = function(name, attrs, parent /*, opt_workspace 
   return e;
 };
 
+Blockly.utils.createSvgStyle = function(styleObj) {
+  let styleStr = '';
+  for(let key in styleObj) {
+    if(styleObj.hasOwnProperty(key)) {
+      styleStr += `${key}: ${styleObj[key]};`
+    }
+  }
+  return styleStr
+}
+
 /**
  * Is this event a right-click?
  * @param {!Event} e Mouse event.

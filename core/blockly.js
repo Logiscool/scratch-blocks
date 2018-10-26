@@ -44,6 +44,7 @@ goog.require('Blockly.FieldColourSlider');
 goog.require('Blockly.FieldDropdown');
 goog.require('Blockly.FieldIconMenu');
 goog.require('Blockly.FieldImage');
+goog.require('Blockly.FieldImageButton');
 goog.require('Blockly.FieldTextInput');
 goog.require('Blockly.FieldTextInputRemovable');
 goog.require('Blockly.FieldTextDropdown');

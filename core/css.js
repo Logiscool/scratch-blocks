@@ -1323,5 +1323,15 @@ Blockly.Css.CONTENT = [
   '.scratchCategoryMenuItem:hover {',
     'color: $colour_toolboxHover !important;',
   '}',
+
+  '.scratchImageButton {',
+  'opacity: 0.7',
+  'cursor: pointer',
+  '}',
+
+  '.scratchImageButton:hover {',
+     'opacity: 1',
+  '}',
+
   ''
 ];
