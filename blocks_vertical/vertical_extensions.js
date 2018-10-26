@@ -272,7 +272,7 @@ Blockly.Extensions.registerMutator('mutator_multi_prop', {
   },
   domToMutation: function(xmlElement) {
     this.valueCount = +xmlElement.getAttribute('value_count');
-    this.updateShape_();
+    this.updateShape_(this.valueCount);
   },
   addInput_: function(count, index) {
     const input = this.appendValueInput(`${this.data}.${index}`);
@@ -285,8 +285,8 @@ Blockly.Extensions.registerMutator('mutator_multi_prop', {
     this.removeInput(`${this.data}.${index}`);
     this.valueCount = count;
   },
-  updateShape_: function() {
-    for(let i = 0; i < this.valueCount; i++) {
+  updateShape_: function(count) {
+    for(let i = 0; i < count; i++) {
       this.appendValueInput(`${this.data}.${i}`);
       this.moveInputBefore(`${this.data}.${i}`, 'BUTTONS');
     }
