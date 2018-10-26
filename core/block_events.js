@@ -547,7 +547,10 @@ Blockly.Events.MultiParameter = function(block, kind, count) {
   }
   Blockly.Events.MultiParameter.superClass_.constructor.call(this, block);
   this.kind = kind;
-  this.count = count
+  this.count = count;
+  this.index = kind === 'add'
+    ? (count - 1)
+    : count
 };
 goog.inherits(Blockly.Events.MultiParameter, Blockly.Events.BlockBase);
 
@@ -584,6 +587,9 @@ Blockly.Events.MultiParameter.prototype.fromJson = function(json) {
   Blockly.Events.MultiParameter.superClass_.fromJson.call(this, json);
   this.count = json['count'];
   this.kind = json['kind'];
+  this.index = this.kind === 'add'
+    ? (this.count - 1)
+    : this.count
 };
 
 /**
@@ -591,6 +597,10 @@ Blockly.Events.MultiParameter.prototype.fromJson = function(json) {
  * @param {boolean} forward True if run forward, false if run backward (undo).
  */
 Blockly.Events.MultiParameter.prototype.run = function(forward) {
-  //TODO
+  this.block.updateShape_(forward
+    ? this.count
+    : (this.kind === "add"
+      ? (this.count-1)
+      : (this.count+1)))
 };
 

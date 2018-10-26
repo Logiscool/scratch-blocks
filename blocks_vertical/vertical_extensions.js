@@ -274,20 +274,21 @@ Blockly.Extensions.registerMutator('mutator_multi_prop', {
     this.valueCount = +xmlElement.getAttribute('value_count');
     this.updateShape_();
   },
-  addInput_: function(count) {
-    const input = this.appendValueInput(`VAL_${count}`);
-    this.moveInputBefore(`VAL_${count}`, 'BUTTONS');
+  addInput_: function(count, index) {
+    const input = this.appendValueInput(`${this.data}.${index}`);
+    this.moveInputBefore(`${this.data}.${index}`, 'BUTTONS');
     this.valueCount = count;
-    Blockly.ScratchBlocks.ProcedureUtils.attachShadow_.call(this, input, 's')
+    const shadow = Blockly.ScratchBlocks.ProcedureUtils.attachShadow_.call(this, input, 's');
+    shadow.data = `${this.data}.${index}`
   },
-  removeInput_: function(count) {
-    this.removeInput(`VAL_${this.valueCount}`);
+  removeInput_: function(count, index) {
+    this.removeInput(`${this.data}.${index}`);
     this.valueCount = count;
   },
   updateShape_: function() {
     for(let i = 0; i < this.valueCount; i++) {
-      this.appendValueInput('VAL_' + i);
-      this.moveInputBefore('VAL_' + i, 'BUTTONS');
+      this.appendValueInput(`${this.data}.${i}`);
+      this.moveInputBefore(`${this.data}.${i}`, 'BUTTONS');
     }
   }
 }, function () {
@@ -295,8 +296,8 @@ Blockly.Extensions.registerMutator('mutator_multi_prop', {
     if (event.type !== Blockly.Events.MULTI_PARAMS_COUNT_CHANGE) {
       return;
     }
-    event.count < this.valueCount
-      ? this.removeInput_(event.count)
-      : this.addInput_(event.count);
+    event.kind === 'remove'
+      ? this.removeInput_(event.count, event.index)
+      : this.addInput_(event.count, event.index);
   })
 });

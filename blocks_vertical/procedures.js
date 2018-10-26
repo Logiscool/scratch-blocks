@@ -340,6 +340,7 @@ Blockly.ScratchBlocks.ProcedureUtils.attachShadow_ = function(input,
       Blockly.Events.fire(new Blockly.Events.BlockCreate(newBlock));
     }
     newBlock.outputConnection.connect(input.connection);
+    return newBlock
   }
 };
 
