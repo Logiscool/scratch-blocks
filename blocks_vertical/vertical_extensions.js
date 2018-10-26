@@ -275,9 +275,10 @@ Blockly.Extensions.registerMutator('mutator_multi_prop', {
     this.updateShape_();
   },
   addInput_: function(count) {
-    this.appendValueInput(`VAL_${count}`);
+    const input = this.appendValueInput(`VAL_${count}`);
     this.moveInputBefore(`VAL_${count}`, 'BUTTONS');
     this.valueCount = count;
+    Blockly.ScratchBlocks.ProcedureUtils.attachShadow_.call(this, input, 's')
   },
   removeInput_: function(count) {
     this.removeInput(`VAL_${this.valueCount}`);
@@ -291,7 +292,7 @@ Blockly.Extensions.registerMutator('mutator_multi_prop', {
   }
 }, function () {
   this.workspace.addChangeListener((event) => {
-    if (event.type !== 'FUNCTION_PARAMS_COUNT_CHANGE') {
+    if (event.type !== 'MULTI_PARAMS_COUNT_CHANGE') {
       return;
     }
     event.count < this.valueCount
