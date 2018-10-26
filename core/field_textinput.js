@@ -322,6 +322,10 @@ Blockly.FieldTextInput.prototype.bindEvents_ = function(htmlInput) {
       Blockly.bindEvent_(htmlInput, 'input', this, this.onHtmlInputChange_);
   htmlInput.onWorkspaceChangeWrapper_ = this.resizeEditor_.bind(this);
   this.workspace_.addChangeListener(htmlInput.onWorkspaceChangeWrapper_);
+
+  htmlInput.onBlurWrapper_ =
+      Blockly.bindEvent_(htmlInput, 'blur', this,
+        this.onHtmlInputBlur_);
 };
 
 /**
@@ -334,9 +338,15 @@ Blockly.FieldTextInput.prototype.unbindEvents_ = function(htmlInput) {
   Blockly.unbindEvent_(htmlInput.onKeyUpWrapper_);
   Blockly.unbindEvent_(htmlInput.onKeyPressWrapper_);
   Blockly.unbindEvent_(htmlInput.onInputWrapper_);
+  Blockly.unbindEvent_(htmlInput.onBlurWrapper_);
   this.workspace_.removeChangeListener(
       htmlInput.onWorkspaceChangeWrapper_);
 };
+
+Blockly.FieldTextInput.prototype.onHtmlInputBlur_ = function(e) {
+  Blockly.WidgetDiv.hide();
+  Blockly.DropDownDiv.hideWithoutAnimation();
+}
 
 /**
  * Handle key down to the editor.
