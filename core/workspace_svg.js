@@ -115,6 +115,11 @@ Blockly.WorkspaceSvg = function(options, opt_blockDragSurface, opt_wsDragSurface
       Blockly.DataCategory);
   this.registerToolboxCategoryCallback(Blockly.PROCEDURE_CATEGORY_NAME,
       Blockly.Procedures.flyoutCategory);
+
+  document.addEventListener('mousemove', (e) => {
+    this.cursorX = e.pageX;
+    this.cursorY = e.pageY;
+  });
 };
 goog.inherits(Blockly.WorkspaceSvg, Blockly.Workspace);
 
@@ -1009,7 +1014,7 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
   if (xmlBlock.tagName.toLowerCase() == 'comment') {
     this.pasteWorkspaceComment_(xmlBlock);
   } else {
-    this.pasteBlock_(xmlBlock);
+    this.pasteBlock_(xmlBlock, false);
   }
 };
 
@@ -1017,7 +1022,26 @@ Blockly.WorkspaceSvg.prototype.paste = function(xmlBlock) {
  * Paste the provided block onto the workspace.
  * @param {!Element} xmlBlock XML block element.
  */
-Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
+Blockly.WorkspaceSvg.prototype.pasteAtCursor = function(xmlBlock) {
+  if (!this.rendered) {
+    return;
+  }
+  if (this.currentGesture_) {
+    this.currentGesture_.cancel();  // Dragging while pasting?  No.
+  }
+  if (xmlBlock.tagName.toLowerCase() == 'comment') {
+    this.pasteWorkspaceComment_(xmlBlock);
+  } else {
+    this.pasteBlock_(xmlBlock, true);
+  }
+};
+
+/**
+ * Paste the provided block onto the workspace.
+ * @param {!Element} xmlBlock XML block element.
+ * @param {Boolean} atCursor At the cursor or at original position
+ */
+Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock, atCursor) {
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
@@ -1025,9 +1049,22 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
 
     // Scratch-specific: Give shadow dom new IDs to prevent duplicating on paste
     Blockly.scratchBlocksUtils.changeObscuredShadowIds(block);
+
     // Move the duplicate to original position.
-    var blockX = parseInt(xmlBlock.getAttribute('x'), 10);
-    var blockY = parseInt(xmlBlock.getAttribute('y'), 10);
+    if(atCursor) {
+      const pos = Blockly.utils.mouseToSvg(
+        {clientX: this.cursorX, clientY: this.cursorY},
+        this.getParentSvg()
+      );
+      const originOffset = this.getOriginOffsetInPixels();
+      var blockX = (pos.x - originOffset.x) / this.scale;
+      var blockY = (pos.y - originOffset.y) / this.scale
+    }
+    else {
+      blockX = parseInt(xmlBlock.getAttribute('x'), 10);
+      blockY = parseInt(xmlBlock.getAttribute('y'), 10);
+    }
+
     if (!isNaN(blockX) && !isNaN(blockY)) {
       if (this.RTL) {
         blockX = -blockX;
@@ -1433,8 +1470,9 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   }
   var menuOptions = [];
   var topBlocks = this.getTopBlocks(true);
-  var eventGroup = Blockly.utils.genUid();
   var ws = this;
+
+  menuOptions.push(Blockly.ContextMenu.wsPasteOption(this));
 
   // Options to undo/redo previous action.
   menuOptions.push(Blockly.ContextMenu.wsUndoOption(this));
@@ -1472,55 +1510,6 @@ Blockly.WorkspaceSvg.prototype.showContextMenu_ = function(e) {
   if (this.options.comments) {
     menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(ws, e));
   }
-
-  // Option to delete all blocks.
-  // Count the number of blocks that are deletable.
-  var deleteList = Blockly.WorkspaceSvg.buildDeleteList_(topBlocks);
-  // Scratch-specific: don't count shadow blocks in delete count
-  var deleteCount = 0;
-  for (var i = 0; i < deleteList.length; i++) {
-    if (!deleteList[i].isShadow()) {
-      deleteCount++;
-    }
-  }
-
-  var DELAY = 10;
-  function deleteNext() {
-    Blockly.Events.setGroup(eventGroup);
-    var block = deleteList.shift();
-    if (block) {
-      if (block.workspace) {
-        block.dispose(false, true);
-        setTimeout(deleteNext, DELAY);
-      } else {
-        deleteNext();
-      }
-    }
-    Blockly.Events.setGroup(false);
-  }
-
-  var deleteOption = {
-    text: deleteCount == 1 ? Blockly.Msg.DELETE_BLOCK :
-        Blockly.Msg.DELETE_X_BLOCKS.replace('%1', String(deleteCount)),
-    enabled: deleteCount > 0,
-    callback: function() {
-      if (ws.currentGesture_) {
-        ws.currentGesture_.cancel();
-      }
-      if (deleteList.length < 2 ) {
-        deleteNext();
-      } else {
-        Blockly.confirm(
-            Blockly.Msg.DELETE_ALL_BLOCKS.replace('%1', String(deleteCount)),
-            function(ok) {
-              if (ok) {
-                deleteNext();
-              }
-            });
-      }
-    }
-  };
-  menuOptions.push(deleteOption);
 
   Blockly.ContextMenu.show(e, menuOptions, this.RTL);
 };

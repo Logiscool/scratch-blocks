@@ -261,7 +261,7 @@ Blockly.ContextMenu.blockHelpOption = function(block) {
  * @package
  */
 Blockly.ContextMenu.blockDuplicateOption = function(block) {
-  var duplicateOption = {
+  return {
     text: Blockly.Msg.DUPLICATE,
     enabled: true,
     callback: function() {
@@ -270,8 +270,46 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
             Blockly.duplicate_(block)
         }, 0);
     }
-  };
-  return duplicateOption;
+  }
+};
+
+/**
+ * Make a context menu option for copying the current block.
+ * @param {!Blockly.BlockSvg} block The block where the right-click originated.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.blockCopyOption = function(block) {
+  return {
+    text: Blockly.Msg.COPY,
+    enabled: true,
+    callback: function() {
+        // Give the context menu a chance to close.
+        setTimeout(function() {
+            Blockly.copy_(block)
+        }, 0);
+    }
+  }
+};
+
+/**
+ * Make a context menu option for cutting the current block.
+ * @param {!Blockly.BlockSvg} block The block where the right-click originated.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.blockCutOption = function(block) {
+  return {
+    text: Blockly.Msg.CUT,
+    enabled: true,
+    callback: function() {
+        // Give the context menu a chance to close.
+        setTimeout(function() {
+            Blockly.copy_(block);
+            block.dispose()
+        }, 0);
+    }
+  }
 };
 
 /**
@@ -299,6 +337,27 @@ Blockly.ContextMenu.blockCommentOption = function(block) {
     };
   }
   return commentOption;
+};
+
+/**
+ * Make a context menu option for pasting the contents of the clipboard.
+ * @param {!Blockly.WorkspaceSvg} ws The workspace where the right-click
+ *     originated.
+ * @return {!Object} A menu option, containing text, enabled, and a callback.
+ * @package
+ */
+Blockly.ContextMenu.wsPasteOption = function(ws) {
+  return {
+    text: Blockly.Msg.PASTE,
+    enabled: !!Blockly.clipboardXml_,
+    callback: function() {
+      // Give the context menu a chance to close.
+      setTimeout(function() {
+        ws.pasteAtCursor(Blockly.clipboardXml_);
+        Blockly.clipboardXml_ = null
+      }, 0)
+    }
+  }
 };
 
 /**
