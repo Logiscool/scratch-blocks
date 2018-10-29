@@ -187,6 +187,10 @@ Blockly.InsertionMarkerManager.prototype.wouldDeleteBlock = function() {
   return this.wouldDeleteBlock_;
 };
 
+Blockly.InsertionMarkerManager.prototype.isSuperiorMovement = function() {
+  return this.localConnection_  && this.localConnection_.isSuperior()
+}
+
 /**
  * Connect to the closest connection and render the results.
  * This should be called at the end of a drag.
@@ -198,6 +202,7 @@ Blockly.InsertionMarkerManager.prototype.applyConnections = function() {
     Blockly.Events.disable();
     this.hidePreview_();
     Blockly.Events.enable();
+
     // Connect two blocks together.
     this.localConnection_.connect(this.closestConnection_);
     if (this.topBlock_.rendered) {
