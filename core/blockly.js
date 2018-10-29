@@ -261,6 +261,15 @@ Blockly.onKeyDown_ = function(e) {
 };
 
 /**
+ * Duplicate a block as xml.
+ * This method can be overridden from outside to provide integration
+ * with external models, where duplication can have side effects.
+ * @param {!Blockly.Block | !Blockly.WorkspaceComment} toCopy Block or Workspace Comment
+ *    to be copied.
+ */
+Blockly.duplicateBlockToXml = (toCopy) => Blockly.Xml.blockToDom(toCopy);
+
+/**
  * Copy a block or workspace comment onto the local clipboard.
  * @param {!Blockly.Block | !Blockly.WorkspaceComment} toCopy Block or Workspace Comment
  *    to be copied.
@@ -270,7 +279,9 @@ Blockly.copy_ = function(toCopy) {
   if (toCopy.isComment) {
     var xml = toCopy.toXmlWithXY();
   } else {
-    var xml = Blockly.Xml.blockToDom(toCopy);
+    var xml = Blockly.duplicateBlockToXml(toCopy);
+    if(!xml) return false;
+
     // Encode start position in XML.
     var xy = toCopy.getRelativeToSurfaceXY();
     xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
@@ -278,6 +289,7 @@ Blockly.copy_ = function(toCopy) {
   }
   Blockly.clipboardXml_ = xml;
   Blockly.clipboardSource_ = toCopy.workspace;
+  return true;
 };
 
 /**
@@ -292,12 +304,13 @@ Blockly.duplicate_ = function(toDuplicate) {
   var clipboardSource = Blockly.clipboardSource_;
 
   // Create a duplicate via a copy/paste operation.
-  Blockly.copy_(toDuplicate);
-  toDuplicate.workspace.paste(Blockly.clipboardXml_);
+  if(Blockly.copy_(toDuplicate)) {
+    toDuplicate.workspace.paste(Blockly.clipboardXml_);
 
-  // Restore the clipboard.
-  Blockly.clipboardXml_ = clipboardXml;
-  Blockly.clipboardSource_ = clipboardSource;
+    // Restore the clipboard.
+    Blockly.clipboardXml_ = clipboardXml;
+    Blockly.clipboardSource_ = clipboardSource;
+  }
 };
 
 /**

@@ -264,7 +264,12 @@ Blockly.ContextMenu.blockDuplicateOption = function(block) {
   var duplicateOption = {
     text: Blockly.Msg.DUPLICATE,
     enabled: true,
-    callback: Blockly.scratchBlocksUtils.duplicateAndDragCallback(block)
+    callback: function() {
+        // Give the context menu a chance to close.
+        setTimeout(function() {
+            Blockly.duplicate_(block)
+        }, 0);
+    }
   };
   return duplicateOption;
 };

@@ -1021,6 +1021,8 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
   Blockly.Events.disable();
   try {
     var block = Blockly.Xml.domToBlock(xmlBlock, this);
+    var moveEvent = new Blockly.Events.BlockMove(block);
+
     // Scratch-specific: Give shadow dom new IDs to prevent duplicating on paste
     Blockly.scratchBlocksUtils.changeObscuredShadowIds(block);
     // Move the duplicate to original position.
@@ -1070,7 +1072,11 @@ Blockly.WorkspaceSvg.prototype.pasteBlock_ = function(xmlBlock) {
     Blockly.Events.enable();
   }
   if (Blockly.Events.isEnabled() && !block.isShadow()) {
-    Blockly.Events.fire(new Blockly.Events.BlockCreate(block));
+    // # Logiscool version #
+    // Only move the block and not create as creation happens
+    // on copy/duplicate and here we only place the block.
+    moveEvent.recordNew();
+    Blockly.Events.fire(moveEvent);
   }
   block.select();
 };
