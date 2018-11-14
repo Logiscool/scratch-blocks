@@ -208,7 +208,7 @@ Blockly.onKeyDown_ = function(e) {
       return;
     }
     if (Blockly.selected && Blockly.selected.isDeletable()) {
-      deleteBlock = true;
+      //deleteBlock = true;
     }
   } else if (e.altKey || e.ctrlKey || e.metaKey) {
     // Don't use meta keys during drags.
@@ -246,8 +246,8 @@ Blockly.onKeyDown_ = function(e) {
       }
     } else if (e.keyCode == 90) {
       // 'z' for undo 'Z' is for redo.
-      Blockly.hideChaff();
-      Blockly.mainWorkspace.undo(e.shiftKey);
+      // Blockly.hideChaff();
+      // Blockly.mainWorkspace.undo(e.shiftKey);
     }
   }
   // Common code for delete and cut.
