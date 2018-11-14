@@ -353,7 +353,7 @@ Blockly.ContextMenu.wsPasteOption = function(ws) {
     callback: function() {
       // Give the context menu a chance to close.
       setTimeout(function() {
-        ws.pasteAtCursor(Blockly.clipboardXml_);
+        ws.pasteAtCursor(Blockly.clipboardXml_());
         Blockly.clipboardXml_ = null
       }, 0)
     }

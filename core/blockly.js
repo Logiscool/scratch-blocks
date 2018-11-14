@@ -94,7 +94,7 @@ Blockly.draggingConnections_ = [];
 
 /**
  * Contents of the local clipboard.
- * @type {Element}
+ * @type {Function}
  * @private
  */
 Blockly.clipboardXml_ = null;
@@ -241,7 +241,7 @@ Blockly.onKeyDown_ = function(e) {
         if (workspace.isFlyout) {
           workspace = workspace.targetWorkspace;
         }
-        workspace.paste(Blockly.clipboardXml_);
+        workspace.paste(Blockly.clipboardXml_());
         Blockly.Events.setGroup(false);
       }
     } else if (e.keyCode == 90) {
@@ -267,7 +267,7 @@ Blockly.onKeyDown_ = function(e) {
  * @param {!Blockly.Block | !Blockly.WorkspaceComment} toCopy Block or Workspace Comment
  *    to be copied.
  */
-Blockly.duplicateBlockToXml = (toCopy) => Blockly.Xml.blockToDom(toCopy);
+Blockly.duplicateBlockToXml = (toCopy) => () => Blockly.Xml.blockToDom(toCopy);
 
 /**
  * Copy a block or workspace comment onto the local clipboard.
@@ -277,19 +277,26 @@ Blockly.duplicateBlockToXml = (toCopy) => Blockly.Xml.blockToDom(toCopy);
  */
 Blockly.copy_ = function(toCopy) {
   if (toCopy.isComment) {
-    var xml = toCopy.toXmlWithXY();
+    var xml = () => toCopy.toXmlWithXY();
   } else {
     var xml = Blockly.duplicateBlockToXml(toCopy);
-    if(!xml) return false;
+  }
+
+  if(!xml) return false;
+
+  var xy = toCopy.getRelativeToSurfaceXY();
+
+  Blockly.clipboardXml_ = () => {
+    xml = xml();
 
     // Encode start position in XML.
-    var xy = toCopy.getRelativeToSurfaceXY();
     xml.setAttribute('x', toCopy.RTL ? -xy.x : xy.x);
     xml.setAttribute('y', xy.y);
-  }
-  Blockly.clipboardXml_ = xml;
+    return xml
+  };
   Blockly.clipboardSource_ = toCopy.workspace;
-  return true;
+
+  return true
 };
 
 /**
@@ -305,7 +312,7 @@ Blockly.duplicate_ = function(toDuplicate) {
 
   // Create a duplicate via a copy/paste operation.
   if(Blockly.copy_(toDuplicate)) {
-    toDuplicate.workspace.paste(Blockly.clipboardXml_);
+    toDuplicate.workspace.paste(Blockly.clipboardXml_());
 
     // Restore the clipboard.
     Blockly.clipboardXml_ = clipboardXml;
