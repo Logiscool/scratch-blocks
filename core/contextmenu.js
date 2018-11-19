@@ -156,6 +156,9 @@ Blockly.ContextMenu.createWidget_ = function(menu) {
   menu.render(div);
   var menuDom = menu.getElement();
   Blockly.utils.addClass(menuDom, 'blocklyContextMenu');
+  Blockly.utils.addClass(menuDom, 'blockly-contextmenu');
+  Blockly.utils.addClass(menuDom, 'react-contextmenu');
+  Blockly.utils.addClass(menuDom, 'react-contextmenu-blockly');
   // Prevent system context menu when right-clicking a Blockly context menu.
   Blockly.bindEventWithChecks_(
       menuDom, 'contextmenu', null, Blockly.utils.noEvent);
@@ -243,7 +246,7 @@ Blockly.ContextMenu.blockDeleteOption = function(block) {
  * @package
  */
 Blockly.ContextMenu.blockHelpOption = function(block) {
-  var url = goog.isFunction(block.helpUrl) ? block.helpUrl() : block.helpUrl;
+  /*var url = goog.isFunction(block.helpUrl) ? block.helpUrl() : block.helpUrl;
   var helpOption = {
     enabled: !!url,
     text: Blockly.Msg.HELP,
@@ -251,7 +254,8 @@ Blockly.ContextMenu.blockHelpOption = function(block) {
       block.showHelp_();
     }
   };
-  return helpOption;
+  return helpOption;*/
+  return false;
 };
 
 /**
