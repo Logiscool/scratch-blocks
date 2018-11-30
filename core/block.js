@@ -1391,10 +1391,10 @@ Blockly.Block.prototype.interpolate_ = function(message, args, lastDummyAlign) {
       }
     }
   }
-  if (indexCount != args.length) {
+/*  if (indexCount != args.length) {
     throw new Error('Block "' + this.type + '": ' +
         'Message does not reference all ' + args.length + ' arg(s).');
-  }
+  }*/
   // Add last dummy input if needed.
   if (elements.length && (typeof elements[elements.length - 1] == 'string' ||
       goog.string.startsWith(
