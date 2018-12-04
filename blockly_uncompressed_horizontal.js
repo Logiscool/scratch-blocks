@@ -6,7 +6,7 @@ var isNodeJS = !!(typeof module !== 'undefined' && module.exports &&
 
 if (isNodeJS) {
   var window = {};
-  require('google-closure-library');
+  require('closure-library');
 }
 
 window.BLOCKLY_DIR = (function() {
@@ -28,7 +28,7 @@ window.BLOCKLY_DIR = (function() {
 window.BLOCKLY_BOOT = function() {
   var dir = '';
   if (isNodeJS) {
-    require('google-closure-library');
+    require('closure-library');
     dir = 'blockly';
   } else {
     // Execute after Closure has loaded.
@@ -1732,6 +1732,7 @@ goog.addDependency("vec/vec4f_test.js", ['goog.vec.vec4fTest'], ['goog.vec.Float
 goog.addDependency("webgl/webgl.js", ['goog.webgl'], []);
 goog.addDependency("window/window.js", ['goog.window'], ['goog.dom.TagName', 'goog.dom.safe', 'goog.html.SafeUrl', 'goog.html.uncheckedconversions', 'goog.labs.userAgent.platform', 'goog.string', 'goog.string.Const', 'goog.userAgent']);
 goog.addDependency("window/window_test.js", ['goog.windowTest'], ['goog.Promise', 'goog.dom', 'goog.dom.TagName', 'goog.events', 'goog.functions', 'goog.html.SafeUrl', 'goog.labs.userAgent.browser', 'goog.labs.userAgent.engine', 'goog.labs.userAgent.platform', 'goog.string', 'goog.testing.PropertyReplacer', 'goog.testing.TestCase', 'goog.testing.jsunit', 'goog.window']);
+og.window']);
 
 // Load Blockly.
 goog.require('Blockly');
