@@ -52,6 +52,8 @@ Blockly.FieldAngle = function(opt_value, opt_validator) {
   Blockly.FieldAngle.superClass_.constructor.call(
       this, opt_value, opt_validator);
   this.addArgType('angle');
+
+
 };
 goog.inherits(Blockly.FieldAngle, Blockly.FieldTextInput);
 
@@ -131,6 +133,11 @@ Blockly.FieldAngle.CENTER_RADIUS = 2;
  * Path to the arrow svg icon.
  */
 Blockly.FieldAngle.ARROW_SVG_PATH = 'icons/arrow.svg';
+
+
+Blockly.FieldAngle.prototype.onHtmlInputBlur_ = function(e) {
+  //Nothing to do here.
+}
 
 /**
  * Clean up this FieldAngle, as well as the inherited FieldTextInput.
