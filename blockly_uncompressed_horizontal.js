@@ -56,7 +56,7 @@ goog.addDependency("../../../" + dir + "/core/bubble_dragger.js", ['Blockly.Bubb
 goog.addDependency("../../../" + dir + "/core/colours.js", ['Blockly.Colours'], []);
 goog.addDependency("../../../" + dir + "/core/comment.js", ['Blockly.Comment'], ['Blockly.Bubble', 'Blockly.Events.BlockChange', 'Blockly.Events.Ui', 'Blockly.Icon', 'goog.userAgent']);
 goog.addDependency("../../../" + dir + "/core/comment_events.js", ['Blockly.Events.CommentBase', 'Blockly.Events.CommentChange', 'Blockly.Events.CommentCreate', 'Blockly.Events.CommentDelete', 'Blockly.Events.CommentMove'], ['Blockly.Events', 'Blockly.Events.Abstract', 'goog.math.Coordinate']);
-goog.addDependency("../../../" + dir + "/core/connection.js", ['Blockly.Connection'], ['Blockly.Events.BlockMove', 'goog.asserts', 'goog.dom']);
+goog.addDependency("../../../" + dir + "/core/connection.js", ['Blockly.Connection', 'Blockly.ConnectionClassManager'], ['Blockly.Events.BlockMove', 'goog.asserts', 'goog.dom']);
 goog.addDependency("../../../" + dir + "/core/connection_db.js", ['Blockly.ConnectionDB'], ['Blockly.Connection']);
 goog.addDependency("../../../" + dir + "/core/constants.js", ['Blockly.constants'], []);
 goog.addDependency("../../../" + dir + "/core/contextmenu.js", ['Blockly.ContextMenu'], ['Blockly.Events.BlockCreate', 'Blockly.scratchBlocksUtils', 'Blockly.utils', 'Blockly.utils.uiMenu', 'goog.dom', 'goog.events', 'goog.style', 'goog.ui.Menu', 'goog.ui.MenuItem', 'goog.userAgent']);
@@ -1747,6 +1747,7 @@ goog.require('Blockly.BubbleDragger');
 goog.require('Blockly.Colours');
 goog.require('Blockly.Comment');
 goog.require('Blockly.Connection');
+goog.require('Blockly.ConnectionClassManager');
 goog.require('Blockly.ConnectionDB');
 goog.require('Blockly.ContextMenu');
 goog.require('Blockly.Css');

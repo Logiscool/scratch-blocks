@@ -31,6 +31,30 @@ goog.require('Blockly.Events.BlockMove');
 goog.require('goog.asserts');
 goog.require('goog.dom');
 
+goog.provide('Blockly.ConnectionClassManager');
+
+Blockly.ConnectionClassManager = {
+  regMap: {},
+  genericHandlers: [],
+  registerHandler: function (className, handler) {
+    this.regMap[className] = handler;
+  },
+  registerGenericHandler: function (handler) {
+    if(this.genericHandlers.indexOf(handler) === -1) {
+      this.genericHandlers.push(handler)
+    }
+  },
+  canBeAttached: function (className, target, source) {
+    let handler = this.regMap[className.type];
+    if (handler) {
+      return handler(target, source);
+    }
+    if(this.genericHandlers.length) {
+      return this.genericHandlers.every(h => h(target, source))
+    }
+    return true;
+  }
+}
 
 /**
  * Class for a connection between blocks.
@@ -449,10 +473,17 @@ Blockly.Connection.prototype.isConnectionAllowed = function(candidate) {
       // Offering to connect the left (male) of a value block to an already
       // connected value pair is ok, we'll splice it in.
       // However, don't offer to splice into an unmovable block.
-      if (candidate.targetConnection &&
-          !candidate.targetBlock().isMovable() &&
-          !candidate.targetBlock().isShadow()) {
-        return false;
+      if (candidate.targetConnection) {
+        const targetBlock = candidate.targetBlock();
+        if ((!candidate.targetBlock().isMovable() &&
+            !candidate.targetBlock().isShadow())) {
+          return false;
+        }
+        if (targetBlock.parentBlock_) {
+          if (!Blockly.ConnectionClassManager.canBeAttached(targetBlock.parentBlock_, targetBlock, candidate)) {
+            return false;
+          }
+        }
       }
       break;
     }
